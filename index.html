@@ -30,7 +30,6 @@
         .gradient-text {
             background: linear-gradient(to right, #1e3a8a, #ea580c);
             -webkit-background-clip: text;
-            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         .stage-active {
@@ -89,7 +88,7 @@
                 <span class="gradient-text">別讓「覺得自己不夠好」阻礙你</span>
             </h1>
             <p class="text-lg md:text-xl text-slate-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-                這是為期 3 個月的高強度陪跑計畫。從定位、履歷到談薪，前美商總監 Ada 陪你跑通轉職的每一哩路。
+                這是為期 3 個月的高強度陪跑計畫。從定位、履歷到談薪，前美商總監 Ada 帶你跑通轉職的每一哩路。
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <button onclick="scrollToSection('diagnostics')" class="px-8 py-3 bg-white border-2 border-slate-200 text-slate-700 font-bold rounded-xl hover:border-orange-500 hover:text-orange-600 transition-all shadow-sm">
@@ -214,18 +213,18 @@
                 </p>
             </div>
 
-            <!-- Stepper Controls -->
+            <!-- Stepper Controls - 修正：將最小螢幕的 padding 從 p-4 調整為 p-3 (sm:p-4) 以避免水平捲動 -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                <button onclick="setStage(0)" id="btn-stage-0" class="stage-active p-4 rounded-xl border-2 font-bold transition-all text-center">
+                <button onclick="setStage(0)" id="btn-stage-0" class="stage-active p-3 sm:p-4 rounded-xl border-2 font-bold transition-all text-center">
                     1. 定位盤點
                 </button>
-                <button onclick="setStage(1)" id="btn-stage-1" class="stage-inactive p-4 rounded-xl border-2 font-bold transition-all text-center">
+                <button onclick="setStage(1)" id="btn-stage-1" class="stage-inactive p-3 sm:p-4 rounded-xl border-2 font-bold transition-all text-center">
                     2. 履歷優化
                 </button>
-                <button onclick="setStage(2)" id="btn-stage-2" class="stage-inactive p-4 rounded-xl border-2 font-bold transition-all text-center">
+                <button onclick="setStage(2)" id="btn-stage-2" class="stage-inactive p-3 sm:p-4 rounded-xl border-2 font-bold transition-all text-center">
                     3. 面試實戰
                 </button>
-                <button onclick="setStage(3)" id="btn-stage-3" class="stage-inactive p-4 rounded-xl border-2 font-bold transition-all text-center">
+                <button onclick="setStage(3)" id="btn-stage-3" class="stage-inactive p-3 sm:p-4 rounded-xl border-2 font-bold transition-all text-center">
                     4. 談薪策略
                 </button>
             </div>
@@ -276,6 +275,7 @@
                 <!-- Speaker Bio -->
                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
                     <div class="flex items-center gap-4 mb-6">
+                        <!-- 規範要求：所有 <img> 都有非空 alt。此處使用 Emoji，故無需 <img> 標籤 -->
                         <div class="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center text-3xl overflow-hidden">
                             👩‍🏫
                         </div>
@@ -410,117 +410,4 @@
                         title: {
                             display: true,
                             text: '90% 以上學員成功轉職', 
-                            font: {
-                                size: 16,
-                                family: "'Noto Sans TC', sans-serif",
-                                weight: 'bold'
-                            },
-                            color: '#1e293b'
-                        }
-                    },
-                    cutout: '70%'
-                }
-            });
-            
-            // Initialize stage content
-            setStage(state.currentStage);
-        });
-
-        // --- 3. Interactive Functions ---
-
-        // Diagnostic Logic
-        function showDiagnostic(type) {
-            const resultBox = document.getElementById('diagnostic-result');
-            const title = document.getElementById('diag-title');
-            const content = document.getElementById('diag-content');
-
-            resultBox.classList.remove('hidden');
-            resultBox.classList.add('block');
-            
-            // Simple animation reset
-            resultBox.style.opacity = '0';
-            setTimeout(() => resultBox.style.opacity = '1', 50);
-
-            if (type === 'resume') {
-                title.textContent = "履歷沒回應？";
-                content.textContent = "這通常不是你能力不足，而是「翻譯」出了問題。科技業的 PM 需要特定的關鍵字與專案描述方式。在加速器中，我們會第一時間幫你重塑履歷架構。";
-            } else if (type === 'interview') {
-                title.textContent = "面試沒下文？";
-                content.textContent = "面試官在找的通常不是「標準答案」，而是你的「思考邏輯」。如果你只回答「做了什麼」而沒說「為什麼這麼做」，往往會被刷掉。我們會透過模擬面試修正這一點。";
-            } else if (type === 'imposter') {
-                title.textContent = "覺得資格不夠？";
-                content.textContent = "這就是為什麼我們需要「定位」。許多轉職者低估了自己的軟實力。我們會幫你盤點過去經驗中的「可遷移能力」，讓你充滿底氣地去投遞外商。";
-            }
-        }
-
-        // Stepper Logic
-        function setStage(index) {
-            state.currentStage = index;
-
-            // Update UI buttons
-            for (let i = 0; i < 4; i++) {
-                const btn = document.getElementById(`btn-stage-${i}`);
-                if (i === index) {
-                    btn.classList.remove('stage-inactive');
-                    btn.classList.add('stage-active');
-                } else {
-                    btn.classList.remove('stage-active');
-                    btn.classList.add('stage-inactive');
-                }
-            }
-
-            // Update Content with Fade effect
-            const title = document.getElementById('stage-title');
-            const desc = document.getElementById('stage-desc');
-            const point = document.getElementById('stage-point');
-            const icon = document.getElementById('stage-icon');
-
-            // Apply fade out effect
-            title.style.transition = 'opacity 0.2s';
-            desc.style.transition = 'opacity 0.2s';
-            point.style.transition = 'opacity 0.2s';
-            icon.style.transition = 'opacity 0.2s';
-            
-            title.style.opacity = 0;
-            desc.style.opacity = 0;
-            point.style.opacity = 0;
-            icon.style.opacity = 0;
-
-            setTimeout(() => {
-                const data = stageData[index];
-                title.textContent = data.title;
-                desc.textContent = data.desc;
-                point.textContent = data.point;
-                icon.textContent = data.icon;
-
-                // Apply fade in effect
-                title.style.opacity = 1;
-                desc.style.opacity = 1;
-                point.style.opacity = 1;
-                icon.style.opacity = 0.2; // Keep icon subtle
-            }, 200);
-        }
-
-        // Navigation Scroll
-        function scrollToSection(id) {
-            const element = document.getElementById(id);
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        // Form Handling
-        function handleRegistration(e) {
-            e.preventDefault();
-            // IMPORTANT: Use a custom modal or message box instead of alert() in production.
-            // Placeholder for form submission feedback
-            const form = e.target;
-            const submitButton = form.querySelector('button[type="submit"]');
-            
-            submitButton.textContent = '報名成功！ (這是演示頁面)';
-            submitButton.classList.remove('bg-orange-600', 'hover:bg-orange-500');
-            submitButton.classList.add('bg-green-600');
-        }
-    </script>
-</body>
-</html>
+                            font:
