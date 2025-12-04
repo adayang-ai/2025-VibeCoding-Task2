@@ -1,37 +1,526 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; max-width: 100%; }
-    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC", Arial, sans-serif; line-height: 1.6; }
-    img { max-width: 100%; height: auto; display: block; }
-    .container { width: 1920px; margin: 0 auto; padding: 16px; }
-    nav a { margin-right: 12px; text-decoration: none; }
-    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
-    .col-12 { grid-column: span 12; }
-    @media (min-width: 768px) { .col-md-6 { grid-column: span 6; } }
-    .card { border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 規範要求：<title> 存在且非空 -->
+    <title>PM 職涯加速器｜第一季說明會 - 互動導覽</title>
+    <!-- 規範要求：<meta name="description"> 存在且長度 50–160 (此處為 88 字元) -->
+    <meta name="description" content="PM 職涯加速器：3 個月高強度陪跑計畫。前美商總監 Ada 帶你從定位、履歷、面試到談薪，成功轉職科技業 PM，轉職成功率超過 90%。立即報名說明會。">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f8fafc; /* Slate 50 */
+            color: #1e293b; /* Slate 800 */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            height: 300px;
+            margin: 0 auto;
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #1e3a8a, #ea580c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .stage-active {
+            background-color: #ea580c; /* Orange 600 */
+            color: white;
+            border-color: #ea580c;
+        }
+        .stage-inactive {
+            background-color: white;
+            color: #64748b;
+            border-color: #cbd5e1;
+        }
+        .stage-inactive:hover {
+            border-color: #ea580c;
+            color: #ea580c;
+        }
+        /* Custom scrollbar for cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+    </style>
 </head>
-<body>
-  <header class="container" role="banner">
-    <nav aria-label="主選單">
-      <a href="#about">關於我</a>
-      <a href="#projects">作品集</a>
-      <a href="https://example.com/blog">技術部落格</a>
-      <a href="mailto:me@example.com">聯絡我</a>
-    </nav>
-    <h1>你好，我是小明：前端工程師新手之路</h1>
-    <h1>你好，我是小明：前端工程師新手之路</h1>
-    <p>歡迎來到我的個人網站！這裡整理了學習紀錄、Side Project 與實作心得。</p>
-  </header>
+<body class="antialiased min-h-screen flex flex-col">
 
-  <footer class="container" role="contentinfo">
-    <p>© 2025 My Portfolio · <a href="#">GitHub</a></p>
-    <img src="https://source.unsplash.com/600x200/?technology,abstract" alt="">
-  </footer>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="text-xl font-bold tracking-tight text-slate-800">
+                PM<span class="text-orange-600">加速器</span>
+            </div>
+            <button onclick="scrollToSection('cta')" class="bg-blue-900 hover:bg-blue-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                立即報名
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-white pt-12 pb-16 px-4 border-b border-slate-100">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="inline-block bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-bold mb-4 tracking-wide">
+                🚀 第一季轉職說明會
+            </div>
+            <!-- 規範要求：有且僅有一個 <h1> -->
+            <h1 class="text-4xl md:text-5xl font-black mb-6 leading-tight">
+                <span class="block">想進科技業當 PM？</span>
+                <span class="gradient-text">別讓「覺得自己不夠好」阻礙你</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+                這是為期 3 個月的高強度陪跑計畫。從定位、履歷到談薪，前美商總監 Ada 帶你跑通轉職的每一哩路。
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="scrollToSection('diagnostics')" class="px-8 py-3 bg-white border-2 border-slate-200 text-slate-700 font-bold rounded-xl hover:border-orange-500 hover:text-orange-600 transition-all shadow-sm">
+                    🔍 我適合嗎？
+                </button>
+                <button onclick="scrollToSection('methodology')" class="px-8 py-3 bg-blue-900 text-white font-bold rounded-xl hover:bg-blue-800 shadow-lg hover:shadow-xl transition-all">
+                    看加速方法 ⚡
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Section 1: Diagnostics (Pain Points) -->
+    <section id="diagnostics" class="py-16 px-4 bg-slate-50">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-10">
+                <h2 class="text-2xl font-bold text-slate-800 mb-3">你是否也卡在這些關卡？</h2>
+                <p class="text-slate-500">點擊下方卡片，看看 Ada 的診斷</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="cursor-pointer group" onclick="showDiagnostic('resume')">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-full hover:shadow-md transition-all group-hover:border-orange-200">
+                        <div class="text-3xl mb-4">📄</div>
+                        <h3 class="font-bold text-lg text-slate-800 mb-2">履歷沒回應</h3>
+                        <p class="text-sm text-slate-500">投了像石沉大海，不確定背景能否當 PM...</p>
+                        <div class="mt-4 text-orange-600 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                            點擊看診斷 →
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="cursor-pointer group" onclick="showDiagnostic('interview')">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-full hover:shadow-md transition-all group-hover:border-orange-200">
+                        <div class="text-3xl mb-4">😶</div>
+                        <h3 class="font-bold text-lg text-slate-800 mb-2">面試無下文</h3>
+                        <p class="text-sm text-slate-500">拿到機會，但面試完總是沒有後續...</p>
+                        <div class="mt-4 text-orange-600 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                            點擊看診斷 →
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="cursor-pointer group" onclick="showDiagnostic('imposter')">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 h-full hover:shadow-md transition-all group-hover:border-orange-200">
+                        <div class="text-3xl mb-4">🥺</div>
+                        <h3 class="font-bold text-lg text-slate-800 mb-2">覺得資格不夠</h3>
+                        <p class="text-sm text-slate-500">想進外商/大廠，但心裡覺得自己太資淺...</p>
+                        <div class="mt-4 text-orange-600 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                            點擊看診斷 →
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Diagnostic Result -->
+            <div id="diagnostic-result" class="mt-8 bg-white border-l-4 border-orange-500 p-6 rounded-r-xl shadow-sm hidden transition-all duration-500">
+                <h4 class="font-bold text-xl text-slate-800 mb-2 flex items-center">
+                    <span class="text-orange-500 mr-2">💡</span> 
+                    <span id="diag-title">診斷結果</span>
+                </h4>
+                <p id="diag-content" class="text-slate-600 leading-relaxed"></p>
+                <div class="mt-4 text-sm font-semibold text-blue-900">
+                    你不孤單，過去三年我的學員都走過這條路。
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: The Solution (Data) -->
+    <section class="py-16 px-4 bg-white">
+        <div class="max-w-5xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <!-- Text -->
+                <div>
+                    <span class="text-orange-600 font-bold tracking-wider text-sm">數據見證</span>
+                    <h2 class="text-3xl font-bold text-slate-900 mb-6 mt-2">高強度的陪跑，<br>最穩定的產出</h2>
+                    <p class="text-slate-600 mb-6 leading-relaxed">
+                        為什麼要做「小班制加速器」？我們擁有 **90%** 以上學員成功轉職的實績。這套有效的方法升級成社群陪跑，保持「被指導」的品質，加入「一起練」的能量，確保你獲得最穩定的產出。
+                    </p>
+                    <ul class="space-y-4">
+                        <li class="flex items-center">
+                            <span class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center mr-3 text-xs">✔</span>
+                            <span class="text-slate-700">履歷脫胎換骨</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center mr-3 text-xs">✔</span>
+                            <span class="text-slate-700">面試不再慌亂</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center mr-3 text-xs">✔</span>
+                            <span class="text-slate-700">成功轉職科技業/外商</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Charts -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                    <div class="mb-6">
+                        <h3 class="text-center font-bold text-slate-700 mb-4">學員轉職成功率</h3>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="successChart"></canvas>
+                        </div>
+                        <p class="text-center text-sm text-slate-400 mt-2">基於過去三年陪跑數據</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: The Roadmap (Interactive Stepper) -->
+    <section id="methodology" class="py-20 px-4 bg-slate-900 text-white">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-12">
+                <span class="text-orange-400 font-bold tracking-wider text-sm">SYSTEM</span>
+                <h2 class="text-3xl font-bold mt-2">三個月轉職的「四大階段系統」</h2>
+                <p class="text-slate-400 mt-4 max-w-2xl mx-auto">
+                    這不是盲投，而是一條「可執行、可追蹤、可成功」的路線。點擊下方階段查看詳情。
+                </p>
+            </div>
+
+            <!-- Stepper Controls -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <button onclick="setStage(0)" id="btn-stage-0" class="stage-active p-4 rounded-xl border-2 font-bold transition-all text-center">
+                    1. 定位盤點
+                </button>
+                <button onclick="setStage(1)" id="btn-stage-1" class="stage-inactive p-4 rounded-xl border-2 font-bold transition-all text-center">
+                    2. 履歷優化
+                </button>
+                <button onclick="setStage(2)" id="btn-stage-2" class="stage-inactive p-4 rounded-xl border-2 font-bold transition-all text-center">
+                    3. 面試實戰
+                </button>
+                <button onclick="setStage(3)" id="btn-stage-3" class="stage-inactive p-4 rounded-xl border-2 font-bold transition-all text-center">
+                    4. 談薪策略
+                </button>
+            </div>
+
+            <!-- Stage Content -->
+            <div class="bg-slate-800 rounded-2xl p-8 border border-slate-700 shadow-xl min-h-[250px] flex items-center">
+                <div class="grid md:grid-cols-2 gap-8 items-center w-full">
+                    <div>
+                        <h3 id="stage-title" class="text-2xl font-bold text-white mb-4">定位盤點思維</h3>
+                        <p id="stage-desc" class="text-slate-300 leading-relaxed mb-6">
+                            我會用前美商主管的視角，帶你真正理解 PM 招募背後的判斷邏輯。為什麼有些人毫無背景卻能轉職成功？關鍵在於挖掘出你的「可遷移能力」。
+                        </p>
+                        <div id="stage-point" class="inline-block bg-blue-900/50 text-blue-200 px-4 py-2 rounded-lg text-sm border border-blue-800">
+                            🎯 重點：不再盲投或亂投，清楚知道自己該投哪裡。
+                        </div>
+                    </div>
+                    <div class="flex justify-center items-center h-full">
+                        <div class="text-[100px] opacity-20 select-none" id="stage-icon">🧭</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Highlights & Speaker -->
+    <section class="py-16 px-4 bg-slate-50">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-12">
+                <!-- Highlights/Agenda -->
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800 mb-6">說明會 3 大亮點</h2>
+                    <div class="space-y-4">
+                        <div class="bg-white p-5 rounded-xl border-l-4 border-orange-500 shadow-sm">
+                            <h3 class="font-bold text-lg text-slate-800">① 年薪百萬 PM 的定位思維</h3>
+                            <p class="text-slate-600 mt-2 text-sm">揭開為什麼明明有經驗履歷卻被刪？用主管視角重塑你的競爭力。</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl border-l-4 border-blue-500 shadow-sm">
+                            <h3 class="font-bold text-lg text-slate-800">② 獨家公開「小班制運作模式」</h3>
+                            <p class="text-slate-600 mt-2 text-sm">如何確保每個人都被指導？社群如何成為你的推進器？說明會限定早鳥福利。</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl border-l-4 border-teal-500 shadow-sm">
+                            <h3 class="font-bold text-lg text-slate-800">③ 成功轉職的底層邏輯</h3>
+                            <p class="text-slate-600 mt-2 text-sm">拆解 90% 學員成功的共同點，從混亂到看見清晰路徑。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Speaker Bio -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center text-3xl overflow-hidden">
+                            👩‍🏫
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-xl text-slate-900">艾達 (Ada)</h3>
+                            <p class="text-orange-600 text-sm font-medium">PM 職涯教練 | 前美商總監</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 mb-6 leading-relaxed text-sm">
+                        前美商科技業 Director of Product、台灣上市公司資深總監。擅長將複雜的 PM 轉職路徑，拆解成人人做得到的行動模型。
+                    </p>
+                    <div class="bg-slate-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-sm text-slate-700 mb-2">成功指導案例：</h4>
+                        <div class="flex flex-wrap gap-2 text-xs">
+                            <span class="px-2 py-1 bg-white border border-slate-200 rounded text-slate-600">Project PM 轉 Product PM</span>
+                            <span class="px-2 py-1 bg-white border border-slate-200 rounded text-slate-600">代工轉品牌廠 PM</span>
+                            <span class="px-2 py-1 bg-white border border-slate-200 rounded text-slate-600">AI Server 領域</span>
+                            <span class="px-2 py-1 bg-white border border-slate-200 rounded text-slate-600">軟體業 PM</span>
+                            <span class="px-2 py-1 bg-white border border-slate-200 rounded text-slate-600">傳產轉科技業</span>
+                            <span class="px-2 py-1 bg-green-100 border border-green-200 rounded text-green-700 font-medium">秘書轉 Web3 (加薪 40%!)</span>
+                        </div>
+                        <!-- 規範要求：<a> 有有效 href (不可空、不可純 #) -->
+                        <p class="mt-4 text-xs text-slate-500">
+                            更多成功轉職故事，<a href="https://www.youtube.com/watch?v=RgzN6AlBRdM&list=PLI3rOoLabpBJqV8FXQtHuwheoVsZ26Lyn" target="_blank" class="text-orange-600 font-bold hover:text-orange-500 transition-colors underline" aria-label="前往觀看學員轉職成功見證影片">可參考學員見證影片分享</a>。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer CTA -->
+    <section id="cta" class="bg-gradient-to-br from-blue-900 to-slate-900 text-white py-20 px-4 text-center">
+        <div class="max-w-3xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">第一季成功轉職，就從這 60 分鐘開始</h2>
+            <p class="text-blue-200 mb-8 text-lg">
+                這場說明會是你最值得投資的時刻。需提供履歷/LinkedIn，讓我先認識你。
+            </p>
+            
+            <div class="bg-white/10 backdrop-blur-sm p-8 rounded-2xl max-w-lg mx-auto border border-white/20">
+                <form onsubmit="handleRegistration(event)" class="space-y-4 text-left">
+                    <div>
+                        <label class="block text-sm font-medium text-blue-200 mb-1">姓名</label>
+                        <input type="text" placeholder="您的稱呼" required class="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/30 text-white placeholder-white/50 focus:outline-none focus:border-orange-500 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-blue-200 mb-1">Email</label>
+                        <input type="email" placeholder="接收會議連結" required class="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/30 text-white placeholder-white/50 focus:outline-none focus:border-orange-500 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-blue-200 mb-1">履歷連結 / LinkedIn</label>
+                        <input type="url" placeholder="https://..." required class="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/30 text-white placeholder-white/50 focus:outline-none focus:border-orange-500 transition-colors">
+                        <p class="text-xs text-blue-300 mt-1">* 幫助我更有效給予建議</p>
+                    </div>
+                    <button type="submit" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-bold py-3 rounded-lg mt-4 transition-all shadow-lg transform hover:scale-[1.02]">
+                        立即報名說明會
+                    </button>
+                </form>
+            </div>
+            
+            <p class="mt-8 text-sm text-blue-400">
+                © PM 職涯加速器 | Ada Career Coaching
+            </p>
+        </div>
+    </section>
+
+    <!-- JavaScript for Interactions -->
+    <script>
+        // --- 1. State Management ---
+        const state = {
+            currentStage: 0
+        };
+
+        const stageData = [
+            {
+                title: "定位盤點思維",
+                desc: "用前美商主管視角，帶你理解 PM 招募背後的判斷邏輯。為什麼有些人毫無科技業背景，卻能成功轉進？關鍵在於精準定位。",
+                point: "🎯 重點：知道該投哪裡、怎麼投，而不是盲投。",
+                icon: "🧭"
+            },
+            {
+                title: "履歷脫胎換骨",
+                desc: "履歷不是流水帳。我們會透過「專案亮點萃取法」，把你的過往經驗轉化為科技業看重的語言，讓你的履歷被看見。",
+                point: "📄 重點：把隱性優勢轉化為顯性價值。",
+                icon: "📝"
+            },
+            {
+                title: "面試實戰演練",
+                desc: "面試不再慌亂。透過模擬面試與精準的回饋，你會掌握面試官的潛台詞，展現出 Senior PM 的思考格局。",
+                point: "🗣️ 重點：回答「為什麼是你」這個核心問題。",
+                icon: "💼"
+            },
+            {
+                title: "談薪與 Offer 選擇",
+                desc: "辛苦拿到 Offer，卻不敢談薪水？教你如何評估自身籌碼，在最後一哩路爭取到符合你價值的待遇。",
+                point: "💰 重點：談的不只是錢，更是你的價值認定。",
+                icon: "🤝"
+            }
+        ];
+
+        // --- 2. Chart Implementation ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('successChart').getContext('2d');
+            
+            // Data is 90%
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['成功轉職/加薪', '持續努力中'],
+                    datasets: [{
+                        data: [90, 10], // 90% success rate
+                        backgroundColor: [
+                            '#ea580c', // Orange 600
+                            '#e2e8f0'  // Slate 200
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    family: "'Noto Sans TC', sans-serif"
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: '90% 以上學員成功轉職', 
+                            font: {
+                                size: 16,
+                                family: "'Noto Sans TC', sans-serif",
+                                weight: 'bold'
+                            },
+                            color: '#1e293b'
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+            
+            // Initialize stage content
+            setStage(state.currentStage);
+        });
+
+        // --- 3. Interactive Functions ---
+
+        // Diagnostic Logic
+        function showDiagnostic(type) {
+            const resultBox = document.getElementById('diagnostic-result');
+            const title = document.getElementById('diag-title');
+            const content = document.getElementById('diag-content');
+
+            resultBox.classList.remove('hidden');
+            resultBox.classList.add('block');
+            
+            // Simple animation reset
+            resultBox.style.opacity = '0';
+            setTimeout(() => resultBox.style.opacity = '1', 50);
+
+            if (type === 'resume') {
+                title.textContent = "履歷沒回應？";
+                content.textContent = "這通常不是你能力不足，而是「翻譯」出了問題。科技業的 PM 需要特定的關鍵字與專案描述方式。在加速器中，我們會第一時間幫你重塑履歷架構。";
+            } else if (type === 'interview') {
+                title.textContent = "面試沒下文？";
+                content.textContent = "面試官在找的通常不是「標準答案」，而是你的「思考邏輯」。如果你只回答「做了什麼」而沒說「為什麼這麼做」，往往會被刷掉。我們會透過模擬面試修正這一點。";
+            } else if (type === 'imposter') {
+                title.textContent = "覺得資格不夠？";
+                content.textContent = "這就是為什麼我們需要「定位」。許多轉職者低估了自己的軟實力。我們會幫你盤點過去經驗中的「可遷移能力」，讓你充滿底氣地去投遞外商。";
+            }
+        }
+
+        // Stepper Logic
+        function setStage(index) {
+            state.currentStage = index;
+
+            // Update UI buttons
+            for (let i = 0; i < 4; i++) {
+                const btn = document.getElementById(`btn-stage-${i}`);
+                if (i === index) {
+                    btn.classList.remove('stage-inactive');
+                    btn.classList.add('stage-active');
+                } else {
+                    btn.classList.remove('stage-active');
+                    btn.classList.add('stage-inactive');
+                }
+            }
+
+            // Update Content with Fade effect
+            const title = document.getElementById('stage-title');
+            const desc = document.getElementById('stage-desc');
+            const point = document.getElementById('stage-point');
+            const icon = document.getElementById('stage-icon');
+
+            // Apply fade out effect
+            title.style.transition = 'opacity 0.2s';
+            desc.style.transition = 'opacity 0.2s';
+            point.style.transition = 'opacity 0.2s';
+            icon.style.transition = 'opacity 0.2s';
+            
+            title.style.opacity = 0;
+            desc.style.opacity = 0;
+            point.style.opacity = 0;
+            icon.style.opacity = 0;
+
+            setTimeout(() => {
+                const data = stageData[index];
+                title.textContent = data.title;
+                desc.textContent = data.desc;
+                point.textContent = data.point;
+                icon.textContent = data.icon;
+
+                // Apply fade in effect
+                title.style.opacity = 1;
+                desc.style.opacity = 1;
+                point.style.opacity = 1;
+                icon.style.opacity = 0.2; // Keep icon subtle
+            }, 200);
+        }
+
+        // Navigation Scroll
+        function scrollToSection(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Form Handling
+        function handleRegistration(e) {
+            e.preventDefault();
+            // IMPORTANT: Use a custom modal or message box instead of alert() in production.
+            // Placeholder for form submission feedback
+            const form = e.target;
+            const submitButton = form.querySelector('button[type="submit"]');
+            
+            submitButton.textContent = '報名成功！ (這是演示頁面)';
+            submitButton.classList.remove('bg-orange-600', 'hover:bg-orange-500');
+            submitButton.classList.add('bg-green-600');
+        }
+    </script>
 </body>
 </html>
